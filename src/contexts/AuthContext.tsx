@@ -46,30 +46,21 @@ export function AuthProvider({children}: AuthProviderProps){
 
     async function signIn({email, password}: SignInProps){
         try{
-          const response = await api.post('/session', {
-            email,
-            password
-          })
+          const response = await api.post('/session', {email,password})
 
          // console.log(response.data);
          const {id, name, token} = response.data;
 
-          setCookie(undefined, '@nextauth.token', token, {
-            maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mês
-            path: "/" // Quais caminhos terão acesso aos Cookies
-          })
-
+          setCookie(undefined, '@nextauth.token', token, {maxAge: 60 * 60 * 24 * 30, path: "/"})  // Expirar em 1 mês // Quais caminhos terão acesso aos Cookies
           setUser({
             id,
             name,
             email,
           })
-
           // Passar para próximas requisição o token
           api.defaults.headers['Authorization'] = `Bearer ${token}`
-
           //Redirecionar usuário para /Dashboard
-          Router.push('/dashboard');
+          Router.push('/Dashboard');
 
         }catch(err){
           console.log("Erro ao acessar ", err);
